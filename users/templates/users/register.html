@@ -1,0 +1,21 @@
+{% extends "./base.html" %}
+
+{% block title %}
+Register
+{%endblock%}
+
+
+{% block body%}
+<form method="POST">
+    {% csrf_token %}
+    {% if messages %}  
+        <ul>   
+            {% for message in messages %}  
+                <li>{{ message }}</li>  
+                {% endfor %}  
+        </ul>   
+    {% endif %}  
+    {{ form }}
+    <button type="submit">Register</button>
+</form>
+{%endblock%}
