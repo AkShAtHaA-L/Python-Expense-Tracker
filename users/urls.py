@@ -8,5 +8,6 @@ urlpatterns = [
     path('', authentication_views.LoginView.as_view(template_name="users/login.html"), name="login"),
     path('register/', user_views.register, name="register"),
     path("login/",authentication_views.LoginView.as_view(template_name="users/login.html"), name="login"),
-    path("logout/",authentication_views.LogoutView.as_view(next_page=reverse_lazy('login')),name="logout")
+    path("logout/",authentication_views.LogoutView.as_view(next_page=reverse_lazy('login')),name="logout"),
+    path("profile/", user_views.profile, name="profile_page")
 ]
