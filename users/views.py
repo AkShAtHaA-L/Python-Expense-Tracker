@@ -21,7 +21,6 @@ def register(request):
         form = RegisterForm()
     return render(request, 'users/register.html',{'form':form})
 
-
 def profile(request):
     if request.user.is_authenticated:
         username = request.user
@@ -31,3 +30,5 @@ def profile(request):
            'budget_of_user': budget_of_user
         }
         return render(request, "users/profile.html", context=context)
+    else:
+        return redirect('login')

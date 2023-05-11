@@ -4,5 +4,8 @@ from django.contrib import messages
 # Create your views here.
 
 
-def index(request):
+def dashboard(request):
     return render(request, "transactions/index.html")
+
+def newentry(request):
+    return render(request, "transactions/newtransaction.html")

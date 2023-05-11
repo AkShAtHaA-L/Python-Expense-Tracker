@@ -21,7 +21,7 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls'), name="users"),
-    path('transactions/',include('transactions.urls'), name="transactions")
+    path('dashboard/',include('transactions.urls'), name="transactions")
 ]
 
 
