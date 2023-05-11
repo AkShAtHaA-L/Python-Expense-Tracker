@@ -1,6 +1,6 @@
 
 from django.contrib import admin
-from django.urls import path,include,reverse_lazy
+from django.urls import path,reverse_lazy
 from . import views as user_views
 from django.contrib.auth import views as authentication_views
 

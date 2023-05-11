@@ -14,8 +14,8 @@ def register(request):
         if form.is_valid():
             form.save()
             new_username = form.cleaned_data.get("username")
-            new_user = User.objects.get(username=new_username)
-            UserProfile.objects.create(User)
+            #new_user = User.objects.get(username=new_username)
+            #UserProfile.objects.create(new_user,20000)
             return redirect('login')
     else:
         form = RegisterForm()
@@ -23,6 +23,8 @@ def register(request):
 
 def profile(request):
     if request.user.is_authenticated:
+        if request.method == "POST":
+            print(request.POST.get("user-budget"))
         username = request.user
         budget_of_user = UserProfile.objects.get(user=username).monthly_budget
         context = {
