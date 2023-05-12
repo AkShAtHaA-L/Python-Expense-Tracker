@@ -1,9 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
 from .forms import RegisterForm
-from django.contrib.sessions.models import Session
 from django.contrib.auth.models import User
-from .models import UserProfile
 
 # Create your views here.
 
@@ -22,18 +20,26 @@ def register(request):
 
 def profile(request):
     if request.user.is_authenticated:
-        print(request.POST)
+        user_object = User.objects.get(pk=int(request.user.id))
         if request.method == "POST":
             updated_email = request.POST.get("user-email")
-            user_object = User.objects.get(pk=int(request.user.id))
+            updated_fname = request.POST.get("user-fname")
+            updated_lname = request.POST.get("user-lname")
             user_object.email = updated_email
+            user_object.first_name = updated_fname
+            user_object.last_name = updated_lname
             user_object.save()
+            messages.add_message(request, messages.INFO, f"{user_object} , user-info updated")
         
         username = request.user
         context = {
-           'username' : username
+        'username' : user_object.username,
+        'useremail': user_object.email,
+        'userfname': user_object.first_name,
+        'userlname': user_object.last_name
         }
         return render(request, "users/profile.html", context=context)
+    
     else:
         messages.add_message(request, messages.INFO, f"please login to view user-profile")
         return redirect('login')

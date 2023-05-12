@@ -6,5 +6,13 @@ User dashboard
 
 
 {% block body%}
-This would be dashboard
+This would be dashboard<br>
+{% for transaction in all_transactions %}
+{{ transaction.type }}
+{{ transaction.amount }}
+{{ transaction.comment }}
+{{ transaction.category }}
+{{ transaction.date }}
+<br>
+{% endfor %}
 {%endblock%}
