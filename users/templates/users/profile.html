@@ -26,19 +26,22 @@ User Profile
                                     </div>
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <div class="form-outline flex-fill mb-0 text-center">
-                                            <h4>Monthly budget set</h4>
-                                            <input type="text" id="user-budget" name="user-budget" value="{{ budget_of_user }}">
+                                            <h4>User Email-ID</h4>
+                                            <input type="email" id="user-email" name="user-email" value="{{ username.email }}">
+                                        </div>
+                                        <div class="form-outline flex-fill mb-0 text-center">
+                                            <h4>First name</h4>
+                                            <input type="text" id="user-fname" name="user-fname" value="{{ username.first_name }}">
+                                        </div>
+                                        <div class="form-outline flex-fill mb-0 text-center">
+                                            <h4>Last name</h4>
+                                            <input type="text" id="user-lname" name="user-lname" value="{{ username.last_name }}">
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                                         <button type="submit" class="btn btn-primary btn-lg">Save changes</button>
                                     </div>
                                 </form>
-                                    <!-- <div class="d-flex justify-content-00258/* mx-4 mb-3 mb-lg-4 ">
-                                        <a href="{% url 'dashboard' %}"><button type="button" class="btn btn-primary btn-lg m-3">Weekly Report</button></a>
-                                        <a href="{% url 'dashboard' %}"><button type="button" class="btn btn-primary btn-lg m-3">Monthly report</button></a>
-                                        <a href="{% url 'dashboard' %}"><button type="button" class="btn btn-primary btn-lg m-3">Yearly report</button></a>
-                                    </div> -->
                             </div>
                         </div>
                     </div>

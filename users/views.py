@@ -22,14 +22,18 @@ def register(request):
 
 def profile(request):
     if request.user.is_authenticated:
+        print(request.POST)
         if request.method == "POST":
-            print(request.POST.get("user-budget"))
+            updated_email = request.POST.get("user-email")
+            user_object = User.objects.get(pk=int(request.user.id))
+            user_object.email = updated_email
+            user_object.save()
+        
         username = request.user
-        budget_of_user = UserProfile.objects.get(user=username).monthly_budget
         context = {
-           'username' : username,
-           'budget_of_user': budget_of_user
+           'username' : username
         }
         return render(request, "users/profile.html", context=context)
     else:
+        messages.add_message(request, messages.INFO, f"please login to view user-profile")
         return redirect('login')
