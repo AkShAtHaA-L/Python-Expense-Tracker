@@ -4,17 +4,38 @@ from django.contrib.auth.decorators import login_required
 from .forms import TransactionForm
 from users.models import User
 from .models import Transaction
+from django.utils import timezone
+import datetime
+from django.db.models import Sum
 
 # Create your views here.
 
 @login_required
 def dashboard(request):
     user = User.objects.get(pk=request.user.id)
-    all_transactions = user.transaction_set.all()
-    for transaction in all_transactions:
-        print(transaction)
+
+    #all transactions
+    all_transactions = user.transaction_set.filter(type="Expense")
+    all_transactions_sum = all_transactions.aggregate(Sum('amount'))['amount__sum']
+
+    #last year expenses
+    last_year = datetime.date.today() - datetime.timedelta(days=365)
+    last_year_data = user.transaction_set.filter(date__gt=last_year,type="Expense")
+    last_year_sum = last_year_data.aggregate(Sum('amount'))['amount__sum']
+    
+    #monthly expenses
+    last_month = datetime.date.today() - datetime.timedelta(days=30)
+    last_month_data = user.transaction_set.filter(date__gt=last_month,type="Expense")
+    last_month_sum = last_month_data.aggregate(Sum('amount'))['amount__sum']
+    latest_five = all_transactions[0:5]
+    
+    monthly_budget = user.profile.monthly_budget
     context = {
-        'all_transactions': all_transactions
+        'username': user,
+        'latest_five': latest_five,
+        'monthly_budget': monthly_budget,
+        'all_transactions_sum': all_transactions_sum,
+        'last_month_sum': last_month_sum
     }
     return render(request, "transactions/index.html", context=context)
 

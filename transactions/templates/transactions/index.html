@@ -6,13 +6,55 @@ User dashboard
 
 
 {% block body%}
-This would be dashboard<br>
-{% for transaction in all_transactions %}
-{{ transaction.type }}
-{{ transaction.amount }}
-{{ transaction.comment }}
-{{ transaction.category }}
-{{ transaction.date }}
-<br>
-{% endfor %}
+<div class="table-responsive-sm m-5">
+    <table class="table table-bordered border-dark table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Type</th>
+                <th scope="col">Category</th>
+                <th scope="col">Comment</th>
+                <th scope="col">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in latest_five %}
+            <tr>
+                <td>{{ transaction.date }}</td>
+                <td>{{ transaction.type }}</td>
+                <td>{{ transaction.category }}</td>
+                <td>{{ transaction.comment }}</td>
+                <td>{{ transaction.amount }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <!-- <tfoot>
+            <td colspan="5" class="text-end">Total - {{latest_sum}}</td>
+        </tfoot> -->
+    </table>
+</div>
+
+<div class="card-group">
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Do you want to set a monthly budget?</h5>
+        <p class="card-text"><input type="number" value="{{monthly_budget}}"></p>
+        <button type="submit">Update budget</button>
+      </div>
+    </div>
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">This month</h5>
+        <p class="card-text">Total spent {{ last_month_sum }}</p>
+
+      </div>
+    </div>
+    <div class="card text-center">
+      <div class="card-body">
+        <h5 class="card-title">Total amount spent till date</h5>
+        <p class="card-text">Total spent throughout the year value, and total income {{all_transactions_sum}}</p>
+
+      </div>
+    </div>
+  </div>
 {%endblock%}
