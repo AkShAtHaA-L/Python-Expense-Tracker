@@ -18,20 +18,19 @@ def register(request):
         form = RegisterForm()
     return render(request, 'users/register.html',{'form':form})
 
+
+#profile method, takes first name and second name from user and updates user-profile only if user is logged in
 def profile(request):
     if request.user.is_authenticated:
         user_object = User.objects.get(pk=int(request.user.id))
         if request.method == "POST":
-            updated_email = request.POST.get("user-email")
             updated_fname = request.POST.get("user-fname")
             updated_lname = request.POST.get("user-lname")
-            user_object.email = updated_email
             user_object.first_name = updated_fname
             user_object.last_name = updated_lname
             user_object.save()
-            messages.add_message(request, messages.INFO, f"{user_object} , user-info updated")
+            messages.add_message(request, messages.INFO, f"{user_object} , your user-info updated")
         
-        username = request.user
         context = {
         'username' : user_object.username,
         'useremail': user_object.email,

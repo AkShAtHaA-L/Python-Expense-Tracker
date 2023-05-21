@@ -10,6 +10,7 @@ from django.db.models import Sum
 
 # Create your views here.
 
+#Set a monthly budget, show last 7 days data in the dashboard
 @login_required
 def dashboard(request):
     user = User.objects.get(pk=request.user.id)
@@ -32,6 +33,7 @@ def dashboard(request):
     return render(request, "transactions/index.html", context=context)
 
 
+#Add a new transaction to the database
 @login_required
 def newentry(request):
     if request.method == 'POST':
@@ -52,9 +54,9 @@ def newentry(request):
                 comment = entered_comment,
                 date = entered_date
             )
-            print(transaction_object)
+            messages.add_message(request, messages.INFO, "This transaction is added!")
         else:
-            print("Nope!")
+            messages.add_message(request, messages.ERROR, f"{user_object} , Not a valid transaction!")
     else:
         form = TransactionForm()
     return render(request, "transactions/newtransaction.html", {'form': form})

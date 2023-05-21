@@ -6,11 +6,60 @@ New Transaction
 
 
 {% block body%}
-This would be form for new transaction
-<form method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Submit Record</button>
-</form>
-
+<section class="vh-100" style="background-color: #fff;">
+    <div class="container h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-12 col-xl-11">
+                <div class="card text-black" style="border-radius: 25px;">
+                    <div class="card-body p-md-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">New Transaction</p>
+                                {% for message in messages %}  
+                                    <h6 class="text-warning">{{ message }}</h6>
+                                {% endfor %}
+                                <form method="POST" class="mx-1 mx-md-4">
+                                {% csrf_token %}
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0 text-center">
+                                            <h5>{{form.type.label}}</h5>
+                                            {{form.type}}
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0 text-center">
+                                            <h5 class="text-center">{{form.amount.label}}</h5>
+                                            {{form.amount}}
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0 text-center">
+                                            <h5 class="text-center">{{form.category.label}}</h5>
+                                            {{form.category}}
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0 text-center">
+                                            <h5 class="text-center">{{form.comment.label}}</h5>
+                                            {{form.comment}}
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <div class="form-outline flex-fill mb-0 text-center">
+                                            <h5 class="text-center">{{form.date.label}}</h5>
+                                            {{form.date}}
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                        <button type="submit" class="btn btn-primary btn-lg">Add this transaction</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 {%endblock%}
