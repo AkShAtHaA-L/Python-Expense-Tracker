@@ -13,29 +13,21 @@ from django.db.models import Sum
 @login_required
 def dashboard(request):
     user = User.objects.get(pk=request.user.id)
-
-    #all transactions
-    all_transactions = user.transaction_set.filter(type="Expense")
-    all_transactions_sum = all_transactions.aggregate(Sum('amount'))['amount__sum']
-
-    #last year expenses
-    last_year = datetime.date.today() - datetime.timedelta(days=365)
-    last_year_data = user.transaction_set.filter(date__gt=last_year,type="Expense")
-    last_year_sum = last_year_data.aggregate(Sum('amount'))['amount__sum']
     
-    #monthly expenses
-    last_month = datetime.date.today() - datetime.timedelta(days=30)
-    last_month_data = user.transaction_set.filter(date__gt=last_month,type="Expense")
-    last_month_sum = last_month_data.aggregate(Sum('amount'))['amount__sum']
-    latest_five = all_transactions[0:5]
+    if request.method == "POST":
+        updated_budget = request.POST.get("monthly_budget")
+        user.profile.monthly_budget = updated_budget
+        user.save()
+    
+    #One week expenses
+    last_week = datetime.date.today() - datetime.timedelta(days=7)
+    last_week_data = user.transaction_set.filter(date__gt=last_week,type="Expense")
     
     monthly_budget = user.profile.monthly_budget
     context = {
         'username': user,
-        'latest_five': latest_five,
+        'last_week_data': last_week_data,
         'monthly_budget': monthly_budget,
-        'all_transactions_sum': all_transactions_sum,
-        'last_month_sum': last_month_sum
     }
     return render(request, "transactions/index.html", context=context)
 
@@ -66,3 +58,55 @@ def newentry(request):
     else:
         form = TransactionForm()
     return render(request, "transactions/newtransaction.html", {'form': form})
+
+
+@login_required
+def allentries(request):
+    user = User.objects.get(pk=request.user.id)
+    monthly_budget = user.profile.monthly_budget
+
+    #monthly expenses
+    last_month = datetime.date.today() - datetime.timedelta(days=30)
+    last_month_expenses = user.transaction_set.filter(date__gt=last_month,type="Expense")
+    last_month_income = user.transaction_set.filter(date__gt=last_month,type="Income")
+    month_chart = {}
+    for expense in last_month_expenses:
+        if expense.category in month_chart:
+            month_chart[expense.category] += expense.amount
+        else:
+            month_chart[expense.category] = expense.amount   
+    last_month_expenses_sum = last_month_expenses.aggregate(Sum('amount'))['amount__sum']
+    last_month_income_sum = last_month_income.aggregate(Sum('amount'))['amount__sum']
+
+    #check budget
+    if last_month_expenses_sum and last_month_expenses_sum >= monthly_budget:
+        budget_exceeded = True
+    else:
+        budget_exceeded = False 
+
+    #last year expenses
+    last_year = datetime.date.today() - datetime.timedelta(days=365)
+    last_year_expenses = user.transaction_set.filter(date__gt=last_year,type="Expense")
+    last_year_income = user.transaction_set.filter(date__gt=last_year,type="Income")
+    year_chart = {}
+    for expense in last_year_expenses:
+        if expense.category in year_chart:
+            year_chart[expense.category] += expense.amount
+        else:
+            year_chart[expense.category] = expense.amount
+    last_year_expenses_sum = last_year_expenses.aggregate(Sum('amount'))['amount__sum']
+    last_year_income_sum = last_year_income.aggregate(Sum('amount'))['amount__sum']
+
+    context = {
+        'username': user,
+        'month_labels': list(month_chart.keys()),
+        'month_data': list(month_chart.values()),
+        'year_labels': list(year_chart.keys()),
+        'year_data': list(year_chart.values()),
+        'month_expense_sum': last_month_expenses_sum,
+        'month_income_sum': last_month_income_sum,
+        'year_expense_sum': last_year_expenses_sum,
+        'year_income_sum': last_year_income_sum,
+        'budget_exceeded': budget_exceeded
+    }
+    return render(request, "transactions/allexpenses.html",context=context)
