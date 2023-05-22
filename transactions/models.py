@@ -8,13 +8,13 @@ TRANSACTION_CHOICES = [
 ]
 
 CATEGORY_CHOICES = [
-    ("Food and groceries", "Food and groceries"),
-    ("Salary","Salary"),
-    ("Bills", "Bills"),
-    ("Shopping", "Shopping"),
-    ("Investment","Investment"),
-    ("Travel","Travel"),
-    ("Others","Others")
+    ("Food and groceries", "Food and groceries 🍕"),
+    ("Salary","Salary 💰"),
+    ("Bills", "Bills 🔌"),
+    ("Shopping", "Shopping 🛍️"),
+    ("Investment","Investment 💸"),
+    ("Travel","Travel ✈️"),
+    ("Others","Others 💅")
 
 ]
 
