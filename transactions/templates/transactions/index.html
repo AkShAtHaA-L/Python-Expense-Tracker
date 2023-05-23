@@ -1,5 +1,4 @@
 {% extends "./base.html" %}
-{% load icons %}
 
 {% block title %}
 User dashboard
@@ -29,8 +28,8 @@ User dashboard
                 <td>{{ transaction.category }}</td>
                 <td>{{ transaction.comment }}</td>
                 <td>{{ transaction.amount }}</td>
-                <td>{% icon 'edit' %}</td>
-                <td><a href="">Delete</a></td>
+                <td><a href="{% url 'edit' transaction.id %}">Edit</a></td>
+                <td><a href="{% url 'delete' transaction.id %}">Delete</a></td>
             </tr>
             {% endfor %}
         </tbody>

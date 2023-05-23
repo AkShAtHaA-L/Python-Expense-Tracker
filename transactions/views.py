@@ -112,3 +112,29 @@ def allentries(request):
         'budget_exceeded': budget_exceeded
     }
     return render(request, "transactions/allexpenses.html",context=context)
+
+
+@login_required
+def edit_entry(request, **kwargs):
+    transaction_id = kwargs["id"]
+    transaction_object = Transaction.objects.get(pk=transaction_id)
+    form = TransactionForm(instance=transaction_object)
+    if request.method == 'POST':
+        updated_transaction = Transaction.objects.get(pk=transaction_id)
+        form = TransactionForm(request.POST,instance=updated_transaction)
+        if form.is_valid():
+            form.save()
+    context = {
+        'form': form
+    }
+    return render(request, "transactions/edit.html",context=context)
+    
+
+@login_required
+def delete_entry(request, **kwargs):
+    print(request.method)
+    if request.method =='POST' and 'delete' in request.POST:
+        transaction_id = kwargs["id"]
+        old_transaction = Transaction.objects.get(pk=transaction_id)
+        print(old_transaction.delete())
+    return redirect('dashboard')
