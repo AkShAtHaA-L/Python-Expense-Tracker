@@ -14,8 +14,7 @@ from django.db.models import Sum
 @login_required
 def dashboard(request):
     user = User.objects.get(pk=request.user.id)
-    
-    if request.method == "POST":
+    if request.method == "POST" and "monthly_budget" in request.POST:
         updated_budget = request.POST.get("monthly_budget")
         user.profile.monthly_budget = updated_budget
         user.save()
@@ -132,9 +131,8 @@ def edit_entry(request, **kwargs):
 
 @login_required
 def delete_entry(request, **kwargs):
-    print(request.method)
-    if request.method =='POST' and 'delete' in request.POST:
+    if request.method =='POST' and 'delete_id' in request.POST:
         transaction_id = kwargs["id"]
         old_transaction = Transaction.objects.get(pk=transaction_id)
-        print(old_transaction.delete())
+        old_transaction.delete()
     return redirect('dashboard')

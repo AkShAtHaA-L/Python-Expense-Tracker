@@ -29,7 +29,10 @@ User dashboard
                 <td>{{ transaction.comment }}</td>
                 <td>{{ transaction.amount }}</td>
                 <td><a href="{% url 'edit' transaction.id %}">Edit</a></td>
-                <td><a href="{% url 'delete' transaction.id %}">Delete</a></td>
+                <form method="POST" action="delete/{{transaction.id}}">
+                  {% csrf_token %}
+                  <td><button type="submit" class="btn" name="delete_id">Delete</button></td>
+                </form>
             </tr>
             {% endfor %}
         </tbody>
@@ -46,7 +49,7 @@ User dashboard
           {% csrf_token %}
         <h5 class="card-title">Do you want to set a monthly budget?</h5>
         <p class="card-text"><input type="number" value="{{monthly_budget}}" name="monthly_budget"></p>
-        <a href="{% url 'dashboard' %}"><button type="submit" class="btn btn-primary btn-lg">Update budget</button></a>
+        <button type="submit" class="btn btn-primary btn-lg">Update budget</button>
         </form>
       </div>
     </div>
