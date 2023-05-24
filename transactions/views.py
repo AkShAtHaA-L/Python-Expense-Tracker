@@ -7,6 +7,7 @@ from .models import Transaction
 from django.utils import timezone
 import datetime
 from django.db.models import Sum
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -23,6 +24,10 @@ def dashboard(request):
     last_week = datetime.date.today() - datetime.timedelta(days=7)
     last_week_data = user.transaction_set.filter(date__gt=last_week,type="Expense")
     
+    #split to pages
+    paginator = Paginator(last_week_data, 5)
+    page = request.GET.get('page')
+    last_week_data = paginator.get_page(page)
     monthly_budget = user.profile.monthly_budget
     context = {
         'username': user,
@@ -123,6 +128,8 @@ def edit_entry(request, **kwargs):
         form = TransactionForm(request.POST,instance=updated_transaction)
         if form.is_valid():
             form.save()
+            messages.add_message(request, messages.INFO, "This transaction is updated!")
+    
     context = {
         'form': form
     }
