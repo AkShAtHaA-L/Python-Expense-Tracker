@@ -19,6 +19,7 @@ def dashboard(request):
         updated_budget = request.POST.get("monthly_budget")
         user.profile.monthly_budget = updated_budget
         user.save()
+        messages.add_message(request, messages.INFO, "Monthly budget is updated!")
     
     #One week expenses
     last_week = datetime.date.today() - datetime.timedelta(days=7)
@@ -58,7 +59,8 @@ def newentry(request):
                 comment = entered_comment,
                 date = entered_date
             )
-            messages.add_message(request, messages.INFO, "This transaction is added!")
+            messages.add_message(request, messages.INFO, "Transaction added!")
+            return redirect("dashboard")
         else:
             messages.add_message(request, messages.ERROR, f"{user_object} , Not a valid transaction!")
     else:
@@ -128,7 +130,8 @@ def edit_entry(request, **kwargs):
         form = TransactionForm(request.POST,instance=updated_transaction)
         if form.is_valid():
             form.save()
-            messages.add_message(request, messages.INFO, "This transaction is updated!")
+            messages.add_message(request, messages.INFO, "Transaction updated!")
+            return redirect("dashboard")
     
     context = {
         'form': form
@@ -142,4 +145,5 @@ def delete_entry(request, **kwargs):
         transaction_id = kwargs["id"]
         old_transaction = Transaction.objects.get(pk=transaction_id)
         old_transaction.delete()
+        messages.add_message(request, messages.INFO, "Transaction deleted!")
     return redirect('dashboard')
