@@ -23,7 +23,7 @@ def dashboard(request):
     
     #One week expenses
     last_week = datetime.date.today() - datetime.timedelta(days=7)
-    last_week_data = user.transaction_set.filter(date__gt=last_week,type="Expense")
+    last_week_data = user.transaction_set.filter(date__gt=last_week,type="Expense").order_by('-date')
     
     #split to pages
     paginator = Paginator(last_week_data, 5)
