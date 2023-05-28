@@ -23,7 +23,7 @@ def dashboard(request):
     
     #One week expenses
     last_week = datetime.date.today() - datetime.timedelta(days=7)
-    last_week_data = user.transaction_set.filter(date__gt=last_week,type="Expense").order_by('-date')
+    last_week_data = user.transaction_set.filter(date__gt=last_week).order_by('-date')
     
     #split to pages
     paginator = Paginator(last_week_data, 5)
@@ -97,11 +97,17 @@ def allentries(request):
     last_year_expenses = user.transaction_set.filter(date__gt=last_year,type="Expense")
     last_year_income = user.transaction_set.filter(date__gt=last_year,type="Income")
     year_chart = {}
+    income_chart = {}
     for expense in last_year_expenses:
         if expense.category in year_chart:
             year_chart[expense.category] += expense.amount
         else:
             year_chart[expense.category] = expense.amount
+    for income in last_month_income:
+        if income.category in income_chart:
+            income_chart[income.category] += income.expense
+        else:
+            income_chart[income.category] = income.amount
     last_year_expenses_sum = last_year_expenses.aggregate(Sum('amount'))['amount__sum']
     last_year_income_sum = last_year_income.aggregate(Sum('amount'))['amount__sum']
 
@@ -111,6 +117,8 @@ def allentries(request):
         'month_data': list(month_chart.values()),
         'year_labels': list(year_chart.keys()),
         'year_data': list(year_chart.values()),
+        'income_labels': list(income_chart.keys()),
+        'income_data': list(income_chart.values()),
         'month_expense_sum': last_month_expenses_sum,
         'month_income_sum': last_month_income_sum,
         'year_expense_sum': last_year_expenses_sum,

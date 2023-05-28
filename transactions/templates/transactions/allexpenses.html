@@ -8,7 +8,7 @@ User dashboard
 
 <div class="card-group">
     <div class="card text-center">
-      <h5 class="card-title">Monthly analysis</h5>
+      <h5 class="card-title">Monthly Expense analysis</h5>
       <div class="card-body">
         <canvas id="mymonthlyexpenses"></canvas>
       </div>
@@ -21,15 +21,23 @@ User dashboard
       </div>
     </div>
     <div class="card text-center">
-      <h5 class="card-title">Yearly analysis</h5>
+      <h5 class="card-title">Yearly Expense analysis</h5>
       <div class="card-body">
         <canvas id="myyearlyexpenses"></canvas>
       </div>
       <div class="card-footer">
         <h6 class="text-info">Total expenses in the past 365 days - {{year_expense_sum}}</h6>
-        <h6 class="text-success">Total income in the past 365 days - {{year_income_sum}}</h6>
       </div>
     </div>
+    <div class="card text-center">
+        <h5 class="card-title">Yearly Income analysis</h5>
+        <div class="card-body">
+          <canvas id="myincomeanalysis"></canvas>
+        </div>
+        <div class="card-footer">
+          <h6 class="text-success">Total income in the past 365 days - {{year_income_sum}}</h6>
+        </div>
+      </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -59,14 +67,39 @@ User dashboard
     });
 </script>
 <script>
-    const ctx2 = document.getElementById('myyearlyexpenses');
-    new Chart(ctx2, {
+    const ctx3 = document.getElementById('myyearlyexpenses');
+    new Chart(ctx3, {
         type: 'pie',
         data: {
         labels: {{ year_labels|safe}},
         datasets: [{
             label: 'Total amount spent',
             data: {{ year_data|safe}},
+            borderWidth: 1,
+        }]
+        },
+        options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero:true
+            }
+        }]
+    }
+    }
+    });
+</script>
+<script>
+    const ctx2 = document.getElementById('myincomeanalysis');
+    new Chart(ctx2, {
+        type: 'pie',
+        data: {
+        labels: {{ income_labels|safe}},
+        datasets: [{
+            label: 'Total amount earned',
+            data: {{ income_data|safe}},
             borderWidth: 1,
         }]
         },
